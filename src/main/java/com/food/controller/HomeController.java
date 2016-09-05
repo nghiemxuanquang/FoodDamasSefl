@@ -1,4 +1,4 @@
-package com.project.foodDamas;
+package com.food.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -32,7 +32,7 @@ public class HomeController {
 		String formattedDate = dateFormat.format(date);
 		
 		model.addAttribute("serverTime", formattedDate );
-		System.out.println("Test Git Commmit");
+		
 		return "home";
 	}
 	

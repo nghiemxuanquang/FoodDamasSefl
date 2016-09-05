@@ -1,0 +1,26 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.food.mapper.SaleMapper">
+	<resultMap type="SaleVO" id="SaleResult">
+		<id property="sno" column="sno"/>
+		<result property="location" column="location"/>
+		<result property="lat" column="lat"/>
+		<result property="lng" column="lng"/>
+		<result property="open_time" column="open_time"/>
+		<result property="close_time" column="close_time"/>
+		<result property="work_date" column="work_date"/>
+		<result property="sales_state" column="sales_state"/>
+		<association property="listOrder" javaType="java.util.List"
+		 column="sno" select="com.food.mapper.OrderMapper.getListOrderBySaleID"></association>
+	</resultMap>
+	<select id="getSaleListByFTID" resultMap="SaleResult">
+		select * from tbl_ft_sales
+		where u_id =#{u_id}
+	</select>
+	<insert id="createNewSale">
+		insert into tbl_ft_sales(location,lat,lng,open_time,close_time,sales_state,u_id)
+		values(#{location},#{lat},#{lng},#{open_time},#{close_time},#{sales_state},#{u_id})
+	</insert>
+</mapper>

@@ -1,0 +1,26 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.food.mapper.CustomerMapper">
+	<resultMap type="CustomerVO" id="CustomerResult">
+		<result property="c_id" column="c_id"/>
+		<result property="c_pw" column="c_pw"/>
+		<result property="c_phone" column="c_phone"/>
+		<result property="c_address" column="c_address"/>
+		<result property="c_mail" column="c_mail"/>
+		<association property="listQna" javaType="java.util.List"
+			column="c_id" select="com.food.mapper.QnAMapper.getListQnAByCustomerID"></association>
+		<association property="listOrder" javaType="java.util.List"
+			column="c_id" select="com.food.mapper.OrderMapper.getListOrderByCustID"></association>
+	</resultMap>
+	<select id="getListCustomer">
+		select *
+		from tbl_customer
+	</select>
+	<select id="getCustomerByID">
+		select * 
+		from tbl_customer
+		where c_id=#{c_id}
+	</select>
+</mapper>

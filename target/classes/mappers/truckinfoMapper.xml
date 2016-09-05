@@ -1,0 +1,100 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.food.mapper.FoodTruckInfoMapper">
+	<resultMap type="FTInfoVO" id="FoodTruckInfoResult">
+		<result property="u_id" column="u_id" />
+		<result property="u_pw" column="u_pw" />
+		<result property="u_name" column="u_name" />
+		<result property="u_email" column="u_email" />
+		<result property="u_phone" column="u_phone" />
+		<result property="u_profile_img" column="u_profile_img" />
+		<result property="register_state" column="register_state" />
+		<result property="co_name" column="co_name" />
+		<result property="co_num" column="co_num" />
+		<result property="co_doc" column="co_doc" />
+		<result property="co_intro" column="co_intro" />
+		<result property="sale_time" column="sale_time" />
+		<result property="register_date" column="register_date" />
+		<association property="f_type" column="f_code" select="getFoodType"
+			javaType="FoodTypeVO">
+		</association>
+		<association property="listSale" select="com.food.mapper.SaleMapper.getSaleListByFTID"
+			javaType="java.util.List" column="u_id"></association>
+		<association property="listQnA" select="com.food.mapper.QnAMapper.getListQnAByFTID"
+			javaType="java.util.List" column="u_id"></association>
+		<association property="menus" column="u_id" javaType="java.util.List"
+			select="com.food.mapper.MenuMapper.getListMenuByFT"></association>
+	</resultMap>
+	<resultMap type="FoodTypeVO" id="FoodTypeResult">
+		<id property="f_code" column="f_code" />
+		<result property="f_type" column="f_type" />
+	</resultMap>
+	<select id="getFoodType" resultType="FoodTypeVO">
+		select *
+		from tbl_f_type type
+		where type.f_code =#{f_code}
+	</select>
+
+
+	<select id="test" resultMap="FoodTruckInfoResult">
+		select * from tbl_ft_info
+	</select>
+	<insert id="createFoodTruck">
+		insert into tbl_ft_info(u_id,u_pw,u_name,u_phone,u_profile_img,f_code,register_state,
+			co_name,co_num,co_doc,co_intro,sale_time)
+		values(#{u_id},#{u_pw},#{u_name},#{u_phone},#{u_profile_img},#{f_code},#{register_state},
+			#{co_name},#{co_num},#{co_doc},#{co_intro},#{sale_time})
+		
+	</insert>
+
+
+	<!-- <select id="getFTInfo" resultMap="FoodTruckInfoResult">
+		select
+		info.u_id,info.u_name,info.u_email,info.u_phone,info.u_profile_img,ftype.f_code,ftype.f_type,info.register_state
+		,info.co_name,info.co_num,info.co_doc,info.co_intro,info.sales_time,info.register_date
+		,menu.mno,menu.m_name,menu.m_price,menu.m_info,menu.m_state,menu.m_img
+		,qs.qno,qs.q_title,qs.q_content,qs.reg_date,qs.modi_date
+		,sl.sno,sl.location,sl.lat,sl.lng,sl.open_time,sl.close_time,sl.work_date,sl.sales_state
+		from tbl_ft_info info
+		left outer join
+		tbl_f_type ftype
+		on info.f_code = ftype.f_code
+		left outer join
+		tbl_ft_menu menu
+		on info.u_id = menu.u_id
+		left outer join
+		tbl_ft_qna qs
+		on info.u_id = qs.u_id
+		left outer join
+		tbl_ft_sales sl
+		on info.u_id = sl.u_id
+	</select>
+
+	<select id="getFTInfoByID" resultMap="FoodTruckInfoResult">
+		select
+		info.u_id,info.u_name,info.u_email,info.u_phone,info.u_profile_img,ftype.f_code,ftype.f_type,info.register_state
+		,info.co_name,info.co_num,info.co_doc,info.co_intro,info.sales_time,info.register_date
+		,menu.mno,menu.m_name,menu.m_price,menu.m_info,menu.m_state,menu.m_img
+		,qs.qno,qs.q_title,qs.q_content,qs.reg_date,qs.modi_date
+		,sl.sno,sl.location,sl.lat,sl.lng,sl.open_time,sl.close_time,sl.work_date,sl.sales_state
+		from tbl_ft_info info
+		left outer join
+		tbl_f_type ftype
+		on info.f_code = ftype.f_code
+		left outer join
+		tbl_ft_menu menu
+		on info.u_id = menu.u_id
+		left outer join
+		tbl_ft_qna qs
+		on info.u_id = qs.u_id
+		left outer join
+		tbl_ft_sales sl
+		on info.u_id = sl.u_id
+		where info.u_id=#{u_id}
+	</select> -->
+
+
+
+</mapper>

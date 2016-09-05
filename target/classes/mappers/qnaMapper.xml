@@ -1,0 +1,79 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.food.mapper.QnAMapper">
+	<resultMap type="QnAVO" id="QnAResult">
+		<id property="qno" column="qno"/>
+		<result property="q_title" column="q_title"/>
+		<result property="q_content" column="q_content"/>
+		<result property="reg_date" column="reg_date"/>
+		<result property="modi_date" column="modi_date"/>
+		<association property="listAns" javaType="java.util.List" column="qno"
+		select="getListAnswerByQuestionID"></association>
+	</resultMap>
+	
+	<resultMap type="AnswerVO" id="AnswerResult">
+		<id property="ano" column="ano"/>
+		<result property="a_content" column="a_content"/>
+		<result property="reg_date" column="reg_date"/>
+		<result property="modi_date" column="modi_date"/>
+		<result property="writer" column="writer"/>
+	</resultMap>
+	<select id="getListQnAByFTID" resultMap="QnAResult">
+		select * 
+		from tbl_ft_qna
+		where u_id =#{u_id}
+	</select>
+	<select id="getListQnAByCustomerID" resultMap="QnAResult">
+		select *
+		from tbl_ft_qna
+		where c_id=#{c_id}
+	</select>
+	<insert id="createQuestion">
+		insert into tbl_ft_qna(q_title,q_content,c_id,u_id)
+		values(#{q_title},#{q_content},#{c_id},#{u_id})
+	</insert>
+	<update id="updateQuestion">
+		update tbl_ft_qna set q_title=#{q_title},q_content=#{q_content},modi_date=now())
+		where qno =#{qno}
+	</update>
+	<delete id="deleteQuestion">
+		delete
+		from tbl_ft_qna
+		where qno=#{qno}
+	</delete>
+	<insert id="createAnswer">
+		insert into tbl_ft_ans(a_content,qno,writer)
+		values(#{a_content},#{qno},#{writer})
+	</insert>
+	<update id="updateAnswer">
+		update tbl_ft_ans set a_content=#{a_content},modi_date=now()
+		where ano=#{ano}
+	</update>
+	<delete id="deleteAnswer">
+		delete 
+		from tbl_ft_ans
+		where ano=#{ano}
+	</delete>
+	<delete id="deleteAnswerByQuestionID">
+		delete
+		from tbl_ft_ans
+		where qno=#{qno}
+	</delete>
+	
+	<select id="getListAnswerByQuestionID" resultMap="AnswerResult">
+		select *
+		from tbl_ft_ans
+		where qno = #{qno}
+	</select>
+	
+	<select id="listAnsByQID_CheckWriter" resultType="hashmap">
+		select *, 
+			if(
+				( exists(select writer from tbl_ft_info where tbl_ft_info.u_id = ans.writer))
+			,'foodtruck','customer') as checkwriter
+		from tbl_ft_ans ans
+		where ans.qno =#{qno}
+	</select>
+</mapper>
